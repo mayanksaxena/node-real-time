@@ -3,7 +3,8 @@
 var app = {},
     express = require("express"),
     redis = require('redis'),
-    redisServer = require('./lib/redisserver');
+    redisServer = require('./lib/redisserver'),
+    radio = require('./lib/radio');
 
 app.server = express();
 
@@ -19,22 +20,9 @@ var env = process.env.NODE_ENV || 'development';
 // Routes
 var port = process.env.PORT || 8000; // Use the port that Heroku provides or default to 5000
 
-
+//Create the server
 var io = require('socket.io').listen(app.server.listen(port));
-
-app.redisServer.subscribe('queue updated');
-app.redisServer.subscribe('remove match from game screen');
-app.redisServer.subscribe('emit game results');
-
-app.redisServer.on('message', function (channel, message) {
-    console.log('Sockets: Message recieved from pubsub channel ' + channel, message);
-    io.sockets.emit(channel, message);
-});
-
-io.sockets.on('connection', function(client){
-    console.log(client.id + " socket connected");
-    //Init and bind socket events
-    //var sockets = new Sockets(io, client, app.redisServer, app.redisClient);
-});
+//Created new instance of radio.
+var myradio = new radio(io, app.redisServer, app.redisClient);
 
 
