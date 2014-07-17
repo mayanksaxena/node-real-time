@@ -8,6 +8,11 @@ var app = {},
 
 app.server = express();
 
+app.server.configure(function(){
+  //app.server.use('/media', express.static(__dirname + '/media'));
+  app.server.use(express.static(__dirname + '/public'));
+});
+
 app.server.get("/", function(req, res){
     res.send("Hello World");
 });

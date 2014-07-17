@@ -1,0 +1,33 @@
+.wrapper {
+	float: left;
+    height: 200px;
+    position: absolute;
+    width: 700px;
+}
+.first-scene {
+	float: left;
+	height: 200px;
+	width: 50px;
+	position: relative;
+	background: red;
+	text-align: center;
+	display: table;
+}
+.first-scene span {
+  display: table-cell;
+  vertical-align: middle;
+}
+.second-scene {
+	float: left;
+	height: 200px;
+	width: 200px;
+	position: relative;
+	background: blue;
+}
+.third-scene {
+	float: left;
+	height: 200px;
+	width: 50px;
+	position: relative;
+	background: black;
+}

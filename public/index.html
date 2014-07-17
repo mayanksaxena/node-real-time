@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/style.css"  />
+        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+        <script src="socket.io/lib/socket.io.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var domainURL = "http://localhost:8000";
+                var socket = io.connect(domainURL);
+                console.log('check 1', socket.socket.connected);
+                if(!socket.socket.connected) {
+                    console.log("socket not connected");
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="first-scene">
+                <span>Mayank</span>
+            </div>
+            <div class="second-scene"></div>
+            <div class="third-scene"></div>
+        </div>
+    </body>
+</html>
