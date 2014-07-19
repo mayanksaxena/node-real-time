@@ -1,27 +1,77 @@
+
 <html>
-    <head>
-        <link rel="stylesheet" href="css/style.css"  />
-        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="js/script.js"></script>
-        <script src="socket.io/lib/socket.io.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                var domainURL = "http://localhost:8000";
-                var socket = io.connect(domainURL);
-                console.log('check 1', socket.socket.connected);
-                if(!socket.socket.connected) {
-                    console.log("socket not connected");
-                }
+<head>
+    <link rel="stylesheet" href="css/style.css"  />
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="socket.io/lib/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var domainURL = "http://localhost:8000";
+            var socket = io.connect(domainURL);
+            var audioName = '';
+            console.log('check 1', socket.socket.connected);
+            if(!socket.socket.connected) {
+                console.log("socket not connected");
+            }
+            $("#imgDynamic").hide();
+            $("#broadcast").click(function(){
+                socket.emit('broadcast', { audio: audioName } );
             });
-        </script>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="first-scene">
-                <span>Mayank</span>
-            </div>
-            <div class="second-scene"></div>
-            <div class="third-scene"></div>
-        </div>
-    </body>
+            $('#Upload').click(function(){
+                $("#imgDynamic").show();
+                $("#imgDynamic").attr("src","loading.gif");
+                
+                var data = new FormData();
+                jQuery.each($('#loadImage')[0].files, function(i, file) {
+                    data.append('file-'+i, file);
+                });
+                $.ajax({
+                    url: 'upload',
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    dataType: "JSON",
+                    success: function(data) {
+                        console.log("your audio is uploaded successfully --->",data.audio);
+                        audioName = data.audio;
+                    }
+                });
+                
+                $("#loadImage").change(function(){
+                    $('#Upload').removeAttr("disabled");
+                });
+            });
+
+        });
+    </script>
+    <style>
+
+        body {
+            font-family:arial;
+        }
+        .preview {
+            width:200px;
+            border:solid 1px #dedede;
+            padding:10px;
+        }
+        #preview {
+            color:#cc0000;
+            font-size:12px
+        }
+    </style>
+</head>
+<div style="width:600px">
+    Select image:
+    <input type="file" id="loadImage" name="photoimg" />
+    <span id ="error_group"></span><br />
+    <input type="button" name="Uplaod" id="Upload" value="upload" />
+</div>
+<div id='preview'>
+    <img src="" id="imgDynamic" height="300" width="300" />
+</div>
+<button id="broadcast">Broadcast my audio</button>
+<div id="view"></div>
 </html>
